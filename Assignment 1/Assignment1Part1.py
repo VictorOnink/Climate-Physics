@@ -13,8 +13,8 @@ from statsmodels.graphics.tsaplots import plot_acf
 from statsmodels.graphics.tsaplots import plot_pacf
 
 # Define the constants of the AR(2) process
-alpha_1=[-0.40]
-alpha_2=[0.6]
+alpha_1=[-0.3]
+alpha_2=[0.75]
 points=100
 
 #Function for determining the autocorrelation for a given lag tau
@@ -57,23 +57,23 @@ for i in range(len(alpha_1)):
 #time for plotting
 plt.figure(1)
 plt.plot(data)
-plt.title('AR(2) Function Output, $a_1=-0.4, a_2=0.6$')
-plt.savefig('function0_4_0_6.pdf')
+plt.title('AR(2) Function Output, $a_1=-0.3, a_2=0.75$')
+#plt.savefig('function0_3_0_75.pdf')
 
 plt.figure(2)
 acor_data=plot_acf(data)
-plt.title('Autocorrelation AR(2), $a_1=-0.4, a_2=0.6$')
+plt.title('Autocorrelation AR(2), $a_1=-0.3, a_2=0.75$')
 plt.xlabel('Lag')
 plt.ylabel('Correlation')
-plt.xlim([-0.5,10])
-plt.savefig('autocor0_4_0_6')
+plt.xlim([-0.5,100])
+#plt.savefig('autocor0_3_0_75.pdf')
 plt.show(acor_data)
 
-plt.figure(3)
-pacor_data=plot_pacf(data, lags=100)
-plt.title('Partial Autocorrelation AR(2), $a_1=-0.4, a_2=0.6$')
-plt.xlabel('Lag')
-plt.ylabel('Correlation')
-plt.xlim([-0.5,10])
-plt.savefig('parautocor0_4_0_6')
-plt.show(pacor_data)
+#plt.figure(3)
+#pacor_data=plot_pacf(data, lags=100)
+#plt.title('Partial Autocorrelation AR(2), $a_1=-0.4, a_2=0.6$')
+#plt.xlabel('Lag')
+#plt.ylabel('Correlation')
+#plt.xlim([-0.5,10])
+#plt.savefig('parautocor0_4_0_6')
+#plt.show(pacor_data)
