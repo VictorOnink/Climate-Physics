@@ -14,15 +14,17 @@ from scipy import signal as sig
 
 def DiscreteFourier(series):
     N = len(series)
-    FmList = []
+    Fourier = []
+    FourierAbs = []
     for m in range(N):
-        Fm = 0.0
+        Fou = 0
         for n in range(N):
-            Fm += series[n] * cm.exp(- 2j * np.pi * m * n / N)
-        FmList.append(Fm / N)
-    Spectrum=np.abs(FmList)**2
+            Fou += series[n] * cm.exp(- 2j * np.pi * m * n / N)
+        Fourier.append(Fou/N)
+        FourierAbs.append(abs(Fou)/N)
+    Spectrum=np.abs(Fourier)**2
     Spectrum=Spectrum[0:len(Spectrum)/2]
-    return FmList, Spectrum
+    return Fourier, Spectrum, FourierAbs
 
 def DeltaTimeSeries(length,step,deltapoint):
     # all of length, step and deltapoint have to be in terms of kyr
@@ -34,7 +36,7 @@ def DeltaTimeSeries(length,step,deltapoint):
     for i in range(int(N)):
         series[i,0]=i*step
         if i == int(deltapoint/step):
-            series[deltapoint/step,1]=1e300
+            series[deltapoint/step,1]=1
     return series
 
 def SinTimeSeries(length,step,amplitude,wavelength):
@@ -76,6 +78,18 @@ def SawToothSeries(length,step,amplitude,wavelength,wobble,ran_amp):
 # part=1 => sin series generation
 # part=2 => sawtooth series generation
 part=input('Que? 0 is delta series, 1 is sin series and 2 is sawtooth series ')
+plt.figure(1)
+plt.xlabel('Time (kyr)')
+plt.ylabel('Output')
+plt.figure(2)
+plt.xlabel('Wavenumber ($kyr^{-1}$)')
+plt.ylabel('Amplitude')
+plt.figure(3)
+plt.xlabel('Wavenumber ($kyr^{-1}$)')
+plt.ylabel('Amplitude')
+plt.figure(4)
+plt.xlabel('Frequency ($kyr^{-1}$)')
+plt.ylabel('Spectral Density')
 if part==0: 
     #Delta Series Computation
     DeltaSeries=DeltaTimeSeries(600,1,300)
@@ -83,12 +97,20 @@ if part==0:
     plt.figure(1)
     plt.plot(DeltaSeries[:,0],DeltaSeries[:,1])
     plt.title('Dirac-Delta Time Series')
+    plt.savefig("DiracDeltaFunction.pdf")
     plt.figure(2)
     plt.plot(DeltaSeries[:,0],FourierSeries[0])
     plt.title('Dirac-Delta Series Fourier Transform')
+    plt.savefig("DiracDeltaFourier.pdf")
     plt.figure(3)
+    plt.plot(DeltaSeries[:,0],FourierSeries[2])
+    plt.title('Dirac-Delta Series Fourier Transform Absolute')
+    plt.savefig("DiracDeltaFourierAbs.pdf")
+    plt.figure(4)
     plt.plot(FourierSeries[1])
     plt.title('Dirac-Delta Time Series Power Spectrum')
+    plt.xlim([0,0.05])
+    plt.savefig("DiracDeltaPowerSpec.pdf")
 elif part==1:
     #Sin series computation
     SinSeries=SinTimeSeries(1000,1,1,100)
@@ -96,34 +118,38 @@ elif part==1:
     plt.figure(1)
     plt.plot(SinSeries[:,0],SinSeries[:,1])
     plt.title('Sinusoidal Time Series')
+    #plt.savefig('SinSeriesFunction.pdf')
     plt.figure(2)
     plt.plot(SinSeries[:,0],FourierSeries[0])
     plt.title('Sinusoidal Time Series Fourier Transform')
+    #plt.savefig('SinSeriesFourier.pdf')
     plt.figure(3)
+    plt.plot(SinSeries[:,0],FourierSeries[2])
+    plt.title('Sinusoidal Time Series Fourier Transform Absolute')
+    #plt.savefig('SinSeriesFourierAbs.pdf')
+    plt.figure(4)
     plt.plot(FourierSeries[1])
     plt.title('Sinusoidal Time Series Power Spectrum')
+    #plt.savefig('SinSeriesPowerSpec.pdf')
 elif part==2:
     #Sawtooth series computation
-    SawtoothSeries=SawToothSeries(1000,1,1,100,0,0)
+    SawtoothSeries=SawToothSeries(1000,1,1,100,20,1)
     FourierSeries=DiscreteFourier(SawtoothSeries[:,1])
     plt.figure(1)
     plt.plot(SawtoothSeries[:,0],SawtoothSeries[:,1])
     plt.title('Sawtooth Time Series')
+    #plt.savefig('SawtoothFunctionWobbleNoise.pdf')
     plt.figure(2)
     plt.plot(SawtoothSeries[:,0],FourierSeries[0])
     plt.title('Sawtooth Time Series Fourier Transform')
+    #plt.savefig('SawtoothFourierWobbleNoise.pdf')
     plt.figure(3)
+    plt.plot(SawtoothSeries[:,0],FourierSeries[2])
+    plt.title('Sawtooth Time Series Fourier Transform Absolute')
+    #plt.savefig('SawtoothFourierAbsWobbleNoise.pdf')
+    plt.figure(4)
     plt.plot(FourierSeries[1])
     plt.title('Sawtooth Time Series Power Spectrum')
+    #plt.savefig('SawtoothPowerSpecWobbleNoise.pdf')
 else:
     print('Wrong answer, run again.')
-
-plt.figure(1)
-plt.xlabel('time (kyr)')
-plt.ylabel('Output')
-plt.figure(2)
-plt.xlabel('wavenumber k')
-plt.ylabel('output')
-plt.figure(3)
-plt.xlabel('Frequency')
-plt.ylabel('Spectral Density')
