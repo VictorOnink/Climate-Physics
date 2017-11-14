@@ -21,7 +21,8 @@ fcor = 2 * omega *  M.sin(lat * pi/180)  # Coriolis parameter
 C1= - (A/(fcor*ro)) * ( (M.pow(omega,2) /(M.pow(fcor,2) - M.pow(omega,2))) + 1)
 C3 = A * omega /(ro*(M.pow(fcor,2) - M.pow(omega,2)))
 
-#  DEFINE time, u, v and the analytical solution, u_ana as arrays and fill them with zero's 
+#  DEFINE time, u, v and the analytical solution, 
+# u_ana as arrays and fill them with zero's 
 time = np.zeros((tmax), dtype='d')
 time_axis = np.zeros((tmax), dtype='d')
 u = np.zeros((tmax), dtype='d')# x-component velocity
@@ -47,7 +48,7 @@ for t in range(len(time)-1):
  time[t+1] = time[t]+dt 
  u[t+1] = u[t] + du
  v[t+1] = v[t] + dv	
- u_ana[t+1] = (C1 * M.sin(fcor * time[t+1])) + ( C3* M.sin((omega * time[t+1]) + phase) )
+ u_ana[t+1] =(C1*M.sin(fcor*time[t+1]))+(C3* M.sin((omega*time[t+1])+phase))
  #Now we try out our 4th order Runge-Kutta Scheme
  #for u[t+1]
  u_kt1= u_kt[t]+(-((A/ro)* M.cos(omega*time[t]+phase))+fcor*v_kt[t])*(dt/2)
@@ -78,5 +79,5 @@ plt.text(0.2, 23, 'u (Analytic): black line', fontsize=10, color='black')
 plt.text(0.2, 21, 'u (Forward Euler): red line', fontsize=10, color='red')
 plt.text(0.2, 19, 'u (4th order Runge-Kutta): orange line', fontsize=10, color='orange')
 plt.grid(True)
-plt.savefig("SeabreezeSimulation.png") # save plot as png-file
+plt.savefig("SeabreezeSimulationRungeKuttaEuler.png") # save plot as png-file
 plt.show() # show plot on screen
